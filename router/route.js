@@ -5,15 +5,16 @@ const { v4: uuidv4 } = require('uuid');
 const moment= require('moment') 
 
 router.get('/listusers', function(req, res) {
-    conf.query('SELECT * from users', function(err, result) {
+    conf.query('SELECT * from citylocation', function(err, result) {
         res.send(result)
     })
 
 })
 
 router.post('/adduser', function(req, res) {
-  if(req.body &&req.body.email&&req.body.password){
-    var sql = "INSERT INTO users (name,email, id,password,role,createtime,accid) VALUES ('"+req.body.name+"', '"+req.body.email+"','"+uuidv4()+"','"+req.body.password+"','ADMIN',STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),345672)";
+  console.log(req.body)
+  if(req.body &&req.body.address&&req.body.city){
+    var sql = "INSERT INTO citylocation (address,city,id,state,pincode,name,created_time,updated_time,place_logo,persion) VALUES ('"+req.body.address+"', '"+req.body.city+"','"+uuidv4()+"','"+req.body.state+"','"+req.body.pincode+"','"+req.body.name+"','"+req.body.created_time+"','"+req.body.updated_time+"','"+req.body.place_logo+"','"+req.body.persion+"')";
     conf.query(sql, function (err, result) {
       if (err){
         res.send({"status":false,"message":err})
@@ -29,32 +30,42 @@ router.post('/adduser', function(req, res) {
      
 
 })
+router.post('/updateuser', function(req, res) {
+  console.log(req.body)
+  if(req.body &&req.body.address&&req.body.city){
+    var id = req.body.id
+    delete req.body.id
+   var respinse = conf.query('UPDATE citylocation SET ? WHERE id = "'+id+'"',req.body)
+   res.send({"status":true,"message":"DB updated seccessfully"})
 
-// product details--------------------------------------------------
-
-router.post('/addproduct', function(req, res) {
-  if(req.body.productname && req.body.productprice && req.body.brand && req.body.quality && req.body.expireDate && req.body.manufacturingDate && req.body.accid){
-    var description  = req.body.discription ? req.body.discription :'-';
-    var sql = "INSERT INTO addproduct (productname, productprice,brand,quality,manufacturingdate,expiretdate,description,createt,updatett,id,accid) VALUES ('"+req.body.productname+"', '"+req.body.productprice+"','"+ req.body.brand+"','"+req.body.quality+"',STR_TO_DATE('"+moment(req.body.manufacturingDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment(req.body.expireDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+description+"',STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+uuidv4()+"','"+req.body.accid+"')";
-    conf.query(sql, function (err, result) {
-      if (err){
-        res.send({"status":false,"message":err})
-      }else{
-       
-        res.send({"status":true,"message":"Product Added Successfully"})
-  
-      }
-    });
-  }else{
-    res.send({"status":false,"message":"Require filed is empty"})
   }
- 
 
 })
+// product details--------------------------------------------------
+
+// router.post('/addproduct', function(req, res) {
+//   if(req.body.productname && req.body.productprice && req.body.brand && req.body.quality && req.body.expireDate && req.body.manufacturingDate && req.body.accid){
+//     var description  = req.body.discription ? req.body.discription :'-';
+//     var sql = "INSERT INTO addproduct (productname, productprice,brand,quality,manufacturingdate,expiretdate,description,createt,updatett,id,accid) VALUES ('"+req.body.productname+"', '"+req.body.productprice+"','"+ req.body.brand+"','"+req.body.quality+"',STR_TO_DATE('"+moment(req.body.manufacturingDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment(req.body.expireDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+description+"',STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+uuidv4()+"','"+req.body.accid+"')";
+//     conf.query(sql, function (err, result) {
+//       if (err){
+//         res.send({"status":false,"message":err})
+//       }else{
+       
+//         res.send({"status":true,"message":"Product Added Successfully"})
+  
+//       }
+//     });
+//   }else{
+//     res.send({"status":false,"message":"Require filed is empty"})
+//   }
+ 
+
+// })
 
 
 router.get('/listproduct', function(req, res) {
-  conf.query('SELECT * from addproduct', function(err, result) {
+  conf.query('SELECT * from citylocation', function(err, result) {
       res.send(result)
   })
 
