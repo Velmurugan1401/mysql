@@ -10,11 +10,24 @@ router.get('/listusers', function(req, res) {
     })
 
 })
+router.post('/listbyid', function(req, res) {
+  conf.query('SELECT * FROM citylocation WHERE id = "'+req.body.id+'"', function(err, result) {
+      res.send(result)
+  })
+
+})
+
+router.post('/listplaces', function(req, res) {
+  conf.query('SELECT * FROM citylocation WHERE persion IN ("'+req.body.persion+'", "all") ', function(err, result) {
+      res.send(result)
+  })
+
+})
 
 router.post('/adduser', function(req, res) {
-  console.log(req.body)
+  // console.log(req.body)
   if(req.body &&req.body.address&&req.body.city){
-    var sql = "INSERT INTO citylocation (address,city,id,state,pincode,name,created_time,updated_time,place_logo,persion) VALUES ('"+req.body.address+"', '"+req.body.city+"','"+uuidv4()+"','"+req.body.state+"','"+req.body.pincode+"','"+req.body.name+"','"+req.body.created_time+"','"+req.body.updated_time+"','"+req.body.place_logo+"','"+req.body.persion+"')";
+    var sql = "INSERT INTO citylocation (address,city,id,state,pincode,name,created_time,updated_time,place_logo,persion) VALUES ('"+req.body.address+"', '"+req.body.city+"','"+uuidv4()+"','"+req.body.state+"','"+req.body.pincode+"','"+req.body.name+"','"+req.body.created_time+"','"+req.body.created_time+"','"+req.body.place_logo+"','"+req.body.persion+"')";
     conf.query(sql, function (err, result) {
       if (err){
         res.send({"status":false,"message":err})
@@ -31,7 +44,7 @@ router.post('/adduser', function(req, res) {
 
 })
 router.post('/updateuser', function(req, res) {
-  console.log(req.body)
+  // console.log(req.body)
   if(req.body &&req.body.address&&req.body.city){
     var id = req.body.id
     delete req.body.id
