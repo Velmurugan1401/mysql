@@ -16,6 +16,17 @@ router.post('/listbyid', function(req, res) {
   })
 
 })
+router.post('/delete', function(req, res) {
+  conf.query('DELETE FROM citylocation WHERE id="'+req.body.id+'"', function(err, result) {
+    if(err){
+      res.send({"status":false,"reasone":result})
+    }else{
+      res.send({"status":true,"message":"Place deleted successfully"})
+    }
+      
+  })
+
+})
 
 router.post('/listplaces', function(req, res) {
   conf.query('SELECT * FROM citylocation WHERE persion IN ("'+req.body.persion+'", "all") ', function(err, result) {
@@ -54,27 +65,7 @@ router.post('/updateuser', function(req, res) {
   }
 
 })
-// product details--------------------------------------------------
 
-// router.post('/addproduct', function(req, res) {
-//   if(req.body.productname && req.body.productprice && req.body.brand && req.body.quality && req.body.expireDate && req.body.manufacturingDate && req.body.accid){
-//     var description  = req.body.discription ? req.body.discription :'-';
-//     var sql = "INSERT INTO addproduct (productname, productprice,brand,quality,manufacturingdate,expiretdate,description,createt,updatett,id,accid) VALUES ('"+req.body.productname+"', '"+req.body.productprice+"','"+ req.body.brand+"','"+req.body.quality+"',STR_TO_DATE('"+moment(req.body.manufacturingDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment(req.body.expireDate).format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+description+"',STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),STR_TO_DATE('"+moment().format('DD/MM/YYYY h:mm:ss')+"','%d/%m/%Y %H:%i:%s'),'"+uuidv4()+"','"+req.body.accid+"')";
-//     conf.query(sql, function (err, result) {
-//       if (err){
-//         res.send({"status":false,"message":err})
-//       }else{
-       
-//         res.send({"status":true,"message":"Product Added Successfully"})
-  
-//       }
-//     });
-//   }else{
-//     res.send({"status":false,"message":"Require filed is empty"})
-//   }
- 
-
-// })
 
 
 router.get('/listproduct', function(req, res) {
