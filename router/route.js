@@ -3,6 +3,10 @@ const conf = require('../conf')
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 const moment= require('moment') 
+const nodemailer = require('nodemailer');
+var xoauth2 = require('xoauth2');
+var smtpTransports = require('nodemailer-smtp-transport');
+
 
 router.get('/listusers', function(req, res) {
     conf.query('SELECT * from citylocation', function(err, result) {
@@ -70,7 +74,13 @@ router.post('/updateuser', function(req, res) {
 
 router.get('/listproduct', function(req, res) {
   conf.query('SELECT * from citylocation', function(err, result) {
+    if (err){
+      res.send({"status":false,"message":err})
+    }else{
+     
       res.send(result)
+
+    }
   })
 
 })
@@ -88,4 +98,36 @@ router.post('/login', function(req, res) {
   })
 
 })
+
+
+
+router .post("/mailsend",function(req,res){
+  var template = req.body.template;
+  var subject = req.body.subject;
+  var to = req.body.email;
+  var smtpTransport = nodemailer.createTransport(smtpTransports({
+    service: 'gmail',
+    auth: {
+        user: 'selfserve1425@gmail.com',
+        pass: 'Vel@1433'
+    }
+  }));
+  var mailOptions = {
+      from: "smartcity@gmail.com",
+      to: to, 
+      subject: subject,
+      text: "template",
+      html:template
+  }
+  smtpTransport.sendMail(mailOptions, function(error, response){
+      if(error){
+          console.log(error);
+      }else{
+          res.send(response);
+      }
+  });
+
+})
+
 module.exports = router;
+
